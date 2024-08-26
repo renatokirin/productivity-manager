@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Productivity manager</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+</head>
+<body>
+<section class="content">
+    <div class="days">
+        <div th:each="day : ${days}" class="column">
+            <div class="columnHeader">
+                <h3 th:text="${day}"></h3>
+                <button class="addTask" th:data-day="${day}">
+                    <img src="svg/add.svg">
+                </button>
+            </div>
+            <div class="tasks">
+                <div th:each="task : ${tasksByDay.get(day)}" th:class="${'task ' + task.type}" th:data-task-id="${task.id}" th:data-height-index="${task.heightIndex}">
+                    <div class="taskContent" th:data-task-id="${task.id}">
+                        <strong th:text="${task.title}"></strong>
+                        <p th:text="${task.note}"></p>
+                    </div>
+                    <div class="buttons">
+                        <button class="moveTask" data-direction="left" th:data-task-id="${task.id}">
+                            <img src="svg/chevron_left.svg">
+                        </button>
+                        <button class="moveTask" data-direction="up" th:data-task-id="${task.id}">
+                            <img src="svg/arrow_up.svg">
+                        </button>
+                        <button class="moveTask" data-direction="down" th:data-task-id="${task.id}">
+                            <img src="svg/arrow_down.svg">
+                        </button>
+                        <button class="moveTask" data-direction="right" th:data-task-id="${task.id}">
+                            <img src="svg/chevron_right.svg">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="taskModal" class="modal">
+    <div class="modalContent">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle">Create/Edit Task</h2>
+        <p id="selectedDay">Day: <span id="dayName"></span></p>
+        <form id="taskForm">
+            <input type="hidden" id="taskId" name="id">
+            <input type="hidden" id="taskDay" name="day">
+            <div class="editArea">
+                <input type="text" id="taskTitle" name="title" class="titleInput" placeholder="Task Title">
+                <textarea id="taskNote" name="note" class="noteInput" placeholder="Task Note (required)" rows="4" cols="50" required></textarea>
+                <div class="radioInput">
+                    <label>
+                        <input type="radio" name="type" value="NOT_IMPORTANT" required>
+                        <p>Not Important</p>
+                    </label>
+                    <label>
+                        <input type="radio" name="type" value="IMPORTANT" required>
+                        <p>Important</p>
+                    </label>
+                    <label>
+                        <input type="radio" name="type" value="HIGH_PRIORITY" required>
+                        <p>High Priority</p>
+                    </label>
+                </div>
+            </div>
+            <div class="modalButtons">
+                <button class="modalBtn" type="button" id="cancelButton">Cancel</button>
+                <div>
+                    <button class="modalBtn" type="button" id="deleteButton">Delete</button>
+                    <button class="modalBtn" type="submit" id="saveButton">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/main.js}"></script>
+</body>
+</html>
